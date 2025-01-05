@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Courier_info extends Model
+class CourierInfo extends Model
 {
     //
     use HasFactory, HasUlids;
