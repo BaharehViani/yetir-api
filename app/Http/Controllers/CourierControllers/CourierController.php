@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Http\Controllers\CourierControllers;
+
+use App\Models\OrderRequest;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class CourierController extends Controller
+{
+    //
+    public function acceptOrderRequest(Request $request) {
+        $request->validate([
+            'order_request_id' => 'required|ulid|exists:requests,id',
+        ]);
+
+        $order_request = OrderRequest::find($request->input('order_request_id'));
+        if (!$order_request) {
+            return response([
+                'status' => 'FAILED',
+                'message' => 'REQUEST_NOT_FOUND'
+            ])->setStatusCode(404);
+        }
+
+        if ($order_request->status !== 'pending') {
+            return response([
+                'status' => 'FAILED',
+                'message' => 'REQUEST_CANNOT_BE_ACCEPTED'
+            ])->setStatusCode(400);
+        }
+
+        $new_order = new Order;
+        $new_order->order_request_id = $order_request->id;
+        $courier = CourierInfo::where('user_id', $request->user()->id)->first();
+        $new_order->courier_id = $courier->id;
+        $new_order->status = 'waiting_for_pickup';
+        $new_order->save();
+        
+        $order_request->status = 'accepted';
+        $order_request->save();
+
+        return response([
+            'status' => 'FAILED',
+            'message' => 'REQUEST_ACCEPTED_AND_ORDER_CREATED_SUCCESSFULY'
+        ])->setStatusCode(200);
+    }    
+}

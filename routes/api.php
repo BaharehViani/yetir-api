@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CourierControllers\CourierController;
+use App\Http\Controllers\CourierControllers\VehicleController;
+use App\Http\Controllers\CustomerControllers\OrderRequestsController;
 
 Route::prefix('/v1')->group(function () {
 
@@ -19,9 +22,16 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/customer')->middleware(['role.verification:customer'])->group(function () {
 
             Route::prefix('/order-requests')->group(function () {
-                Route::get('/', [\App\Http\Controllers\CustomerControllers\OrderRequestsController::class, 'index']);
-                Route::get('/{id}', [\App\Http\Controllers\CustomerControllers\OrderRequestsController::class, 'show']);
+                Route::get('/', [OrderRequestsController::class, 'index']);
+                Route::get('/{id}', [OrderRequestsController::class, 'show']);
+                Route::post('create-request', [OrderRequestsController::class, 'createOrderRequest']);
             });
+
+        });
+
+        Route::prefix('/courier')->middleware(['role.verification:courier'])->group(function () {
+            Route::post('/add-vehicle', [VehicleController::class, 'addVehicle']);
+            Route::post('/accept-request', [CourierController::class, 'acceptOrderRequest']);
 
         });
 
