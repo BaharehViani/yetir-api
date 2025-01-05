@@ -16,10 +16,13 @@ class CourierInfo extends Model
     protected $table = 'courier_info';
     protected $with = ['user'];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function orders() {
+
+    public function orders()
+    {
         return $this->hasMany(Order::class);
     }
 }
