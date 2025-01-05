@@ -2,8 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublicControllers\UsersController;
+use App\Http\Controllers\CourierControllers\OrdersController;
 use App\Http\Controllers\CourierControllers\CourierController;
-use App\Http\Controllers\CourierControllers\VehicleController;
+use App\Http\Controllers\CourierControllers\VehiclesController;
 use App\Http\Controllers\CustomerControllers\OrderRequestsController;
 
 Route::prefix('/v1')->group(function () {
@@ -24,15 +26,25 @@ Route::prefix('/v1')->group(function () {
             Route::prefix('/order-requests')->group(function () {
                 Route::get('/', [OrderRequestsController::class, 'index']);
                 Route::get('/{id}', [OrderRequestsController::class, 'show']);
-                Route::post('create-request', [OrderRequestsController::class, 'createOrderRequest']);
+                Route::post('/', [OrderRequestsController::class, 'create']);
             });
 
         });
 
         Route::prefix('/courier')->middleware(['role.verification:courier'])->group(function () {
-            Route::post('/add-vehicle', [VehicleController::class, 'addVehicle']);
-            Route::post('/accept-request', [CourierController::class, 'acceptOrderRequest']);
-            Route::post('/update-order-status', [CourierController::class, 'updateOrderStatus']);
+            
+            Route::prefix('/info')->group(function () {
+                Route::prefix('/', [CourierController::class, 'create']);
+            });
+
+            Route::prefix('/vehicles')->group(function () {
+                Route::post('/', [VehiclesController::class, 'create']);
+            });
+
+            Route::prefix('/order')->group(function () {
+                Route::post('/', [OrdersController::class, 'create']);
+                Route::post('/', [OrdersController::class, 'updateStatus']);
+            });
 
         });
 

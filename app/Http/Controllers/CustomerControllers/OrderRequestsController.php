@@ -21,7 +21,7 @@ class OrderRequestsController extends Controller
         ])->setStatusCode(404);
     }
 
-    public function createOrderRequest(Request $request) {
+    public function create(Request $request) {
         
         $request->validate([
             'type' => 'required|string',

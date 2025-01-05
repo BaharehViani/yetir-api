@@ -5,10 +5,10 @@ namespace App\Http\Controllers\CourierControllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class VehicleController extends Controller
+class VehiclesController extends Controller
 {
     //
-    public function addVehicle(Request $request) {
+    public function create(Request $request) {
 
         $request->validate([
             'type' => 'required|string|',
