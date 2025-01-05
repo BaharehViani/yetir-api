@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 class VehicleController extends Controller
 {
     //
-    public function addVehicle(Request $request)
-    {
+    public function addVehicle(Request $request) {
+
         $request->validate([
             'type' => 'required|string|',
             'plate_number' => 'required|string||unique:vehicles,plate_number',

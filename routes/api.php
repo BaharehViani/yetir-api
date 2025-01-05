@@ -32,6 +32,7 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/courier')->middleware(['role.verification:courier'])->group(function () {
             Route::post('/add-vehicle', [VehicleController::class, 'addVehicle']);
             Route::post('/accept-request', [CourierController::class, 'acceptOrderRequest']);
+            Route::post('/update-order-status', [CourierController::class, 'updateOrderStatus']);
 
         });
 

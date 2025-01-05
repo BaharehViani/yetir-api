@@ -43,5 +43,32 @@ class CourierController extends Controller
             'status' => 'FAILED',
             'message' => 'REQUEST_ACCEPTED_AND_ORDER_CREATED_SUCCESSFULY'
         ])->setStatusCode(200);
-    }    
+    }
+
+    public function updateOrderStatus(Request $request) {
+        $request->validate([
+            'order_id' => 'required|ulid',
+            'status' => 'required'
+        ]);
+        $order = Order::find($request->order_id);
+        if (!$order) {
+            return response([
+                'status' => 'FAILED',
+                'message' => 'ORDER_NOT_FOUND'
+            ])->setStatusCode(404);
+        }
+        $order->status = $request->input('status');
+        $order->save();
+        return [
+            'status' => 'SUCCESSFUL',
+            'message' => 'ORDER_STATUS_UPDATED_SUCCESSFULLY',
+        ];
+            
+    }
+
+    public function addCourierInfo(Request $request) {
+        $request->validate([
+            'photo_url' => 'required',
+        ]);
+    }
 }
