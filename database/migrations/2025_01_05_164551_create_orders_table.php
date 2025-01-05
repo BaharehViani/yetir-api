@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->ulid('id')->primary();            
-            $table->foreignUlid('request_id')->constrained('orequests');
-            $table->foreignUlid('courier_id')->constrained('courier_info');
             $table->text('status', ['canceled','waiting_for_pickup', 'in_delivery', 'delivered'])->default('waiting_for_pickup');
             $table->dateTime('canceled_at')->nullable();  
             $table->timestamps();
