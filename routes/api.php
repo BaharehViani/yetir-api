@@ -12,6 +12,10 @@ Route::prefix('/v1')->group(function () {
 
     Route::middleware(['auth:sanctum'])->group(function () {
 
+        Route::prefix('/x-user')->group(function () {
+            Route::get('/', [App\Http\Controllers\XUserControllers\UserController::class, 'index']);
+        });
+
         Route::prefix('/customer')->middleware(['role.verification:customer'])->group(function () {
 
             Route::prefix('/order-requests')->group(function () {
