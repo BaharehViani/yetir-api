@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicControllers\UsersController;
-use App\Http\Controllers\CourierControllers\OrdersController;
 use App\Http\Controllers\CourierControllers\CourierController;
 use App\Http\Controllers\CourierControllers\VehiclesController;
 use App\Http\Controllers\CustomerControllers\OrderRequestsController;
@@ -30,8 +29,7 @@ Route::prefix('/v1')->group(function () {
             });
 
             Route::prefix('/orders')->group(function () {
-                Route::get('/', [OrderRequestsController::class, 'index']);
-                Route::get('/{id}', [OrderRequestsController::class, 'show']);
+                Route::get('/', [App\Http\Controllers\CustomerControllers\OrdersController::class, 'index']);
             });
 
         });
@@ -47,10 +45,9 @@ Route::prefix('/v1')->group(function () {
             });
 
             Route::prefix('/orders')->group(function () {
-                Route::post('/', [OrdersController::class, 'create']);
-                Route::patch('/', [OrdersController::class, 'updateStatus']);
-                Route::get('/active', [OrdersController::class, 'showActiveOrders']);
-                Route::get('/delivered', [OrdersController::class, 'showDeliveredOrders']);
+                Route::get('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'index']);
+                Route::post('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'create']);
+                Route::patch('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'update']);
             });
 
         });

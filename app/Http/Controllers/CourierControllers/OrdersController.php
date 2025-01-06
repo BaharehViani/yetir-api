@@ -32,8 +32,6 @@ class OrdersController extends Controller
 
         $new_order = new Order;
         $new_order->order_request_id = $order_request->id;
-        // $courier = CourierInfo::where('user_id', $request->user()->id)->first();
-        // $new_order->courier_id = $courier->id;
         $new_order->courier_id = $request->user()->courierinfo()->first()->id;
         $new_order->status = 'waiting_for_pickup';
         $new_order->save();
@@ -47,20 +45,24 @@ class OrdersController extends Controller
         ];
     }
 
-    public function updateStatus(Request $request) {
+    public function update(Request $request, $id) {
+
         $request->validate([
-            'order_id' => 'required|ulid',
             'status' => 'required|string'
         ]);
-        $order = Order::find($request->input('order_id'));
+
+        $order = Order::where('courier_id', $request->user()->id)->find($id);
+
         if (!$order) {
             return response([
                 'status' => 'FAILED',
                 'message' => 'ORDER_NOT_FOUND'
             ])->setStatusCode(404);
         }
+
         $order->status = $request->input('status');
         $order->save();
+
         return [
             'status' => 'SUCCESSFUL',
             'message' => 'ORDER_STATUS_UPDATED_SUCCESSFULLY',
@@ -68,38 +70,26 @@ class OrdersController extends Controller
             
     }
 
-    public function showActiveOrders(Request $request) {
-        $user = $request->user();
-        $activeOrders = $user->orders()->whereIn('status', ['waiting_for_pickup', 'in_delivery'])->get();
+    public function index(Request $request) {
+
+        $request->validate([
+            'status' => 'required|in:waiting_for_pickup,in_delivery,delivered'
+        ]);
+
+        $activeOrders = $request->user()->orders()->whereIn('status', $request->input('status'))->get();
+
         if ($activeOrders->isEmpty()) {
             return response([
                 'status' => 'FAILED',
                 'message' => 'NO_ACTIVE_ORDERS',
             ])->setStatusCode(404);
         }
+
         return [
             'status' => 'SUCCESSFUL',
-            'message' => 'ACTIVE_ORDERS_FETCHED_SUCCESSFULLY',
+            'message' => 'ACTIVE_ORDERS_GOT_SUCCESSFULLY',
             'payload' => [
                 'active_orders' => $activeOrders
-            ]
-        ];
-    } 
-
-    public function showDeliveredOrders(Request $request) {
-        $user = $request->user();
-        $deliveredOrders = $user->orders()->where('status', 'delivered')->get();
-        if ($deliveredOrders->isEmpty()) {
-            return response([
-                'status' => 'FAILED',
-                'message' => 'NO_DELIVERED_ORDERS',
-            ])->setStatusCode(404);
-        }
-        return [
-            'status' => 'SUCCESSFUL',
-            'message' => 'DELIVERED_ORDERS_FETCHED_SUCCESSFULLY',
-            'payload' => [
-                'delivered_orders' => $deliveredOrders
             ]
         ];
     }

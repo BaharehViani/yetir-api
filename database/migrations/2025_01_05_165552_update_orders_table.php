@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->foreignUlid('order_request_id')->constrained();
-            $table->foreignUlid('courier_id')->refrences('id')->on('users');
+            $table->foreignUlid('courier_id')->constrained('users', 'id');
         });
     }
 
