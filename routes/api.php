@@ -29,6 +29,11 @@ Route::prefix('/v1')->group(function () {
                 Route::post('/', [OrderRequestsController::class, 'create']);
             });
 
+            Route::prefix('/orders')->group(function () {
+                Route::get('/', [OrderRequestsController::class, 'index']);
+                Route::get('/{id}', [OrderRequestsController::class, 'show']);
+            });
+
         });
 
         Route::prefix('/courier')->middleware(['role.verification:courier'])->group(function () {
@@ -41,7 +46,7 @@ Route::prefix('/v1')->group(function () {
                 Route::post('/', [VehiclesController::class, 'create']);
             });
 
-            Route::prefix('/order')->group(function () {
+            Route::prefix('/orders')->group(function () {
                 Route::post('/', [OrdersController::class, 'create']);
                 Route::patch('/', [OrdersController::class, 'updateStatus']);
                 Route::get('/active', [OrdersController::class, 'showActiveOrders']);

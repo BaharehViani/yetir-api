@@ -15,14 +15,9 @@ class Order extends Model
     //
     use HasFactory, HasUlids;
 
-    //protected $with = ['request'];
+    protected $with = ['orderrequest'];
 
-    protected $fillable = [
-        'pickupplace',
-        'dropoffplace',
-    ];
-
-
+    
     public function courierinfo() {
         return $this->belongsTo(CourierInfo::class);
     }
