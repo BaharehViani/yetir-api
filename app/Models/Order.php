@@ -15,14 +15,14 @@ class Order extends Model
     //
     use HasFactory, HasUlids;
 
-    protected $with = ['orderrequest'];
+    protected $with = ['orderRequest'];
 
     
     public function courierinfo() {
         return $this->belongsTo(CourierInfo::class);
     }
 
-    public function orderrequest() {
+    public function orderRequest() {
         return $this->belongsTo(OrderRequest::class);
     }
 

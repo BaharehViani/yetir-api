@@ -21,7 +21,6 @@ Route::prefix('/v1')->group(function () {
         });
 
         Route::prefix('/customer')->middleware(['role.verification:customer'])->group(function () {
-
             Route::prefix('/order-requests')->group(function () {
                 Route::get('/', [OrderRequestsController::class, 'index']);
                 Route::get('/{id}', [OrderRequestsController::class, 'show']);

@@ -35,12 +35,23 @@ class User extends Authenticatable
         return $this->hasOne(CourierInfo::class);
     }
 
-    public function orders(): HasManyThrough {
+    public function courierorders(): HasManyThrough {
         return $this->hasManyThrough(
             Order::class, 
             CourierInfo::class,
             'user_id',
             'courier_id',
+            'id',
+            'id'
+        );
+    }
+
+    public function customerorders(): HasManyThrough {
+        return $this->hasManyThrough(
+            Order::class, 
+            OrderRequest::class,
+            'user_id',
+            'order_request_id',
             'id',
             'id'
         );

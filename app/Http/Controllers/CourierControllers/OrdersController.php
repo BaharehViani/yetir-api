@@ -51,7 +51,7 @@ class OrdersController extends Controller
             'status' => 'required|string'
         ]);
 
-        $order = Order::where('courier_id', $request->user()->id)->find($id);
+        $order = Order::where('courier_id', $request->user()->courierinfo()->first()->id)->find($id);
 
         if (!$order) {
             return response([
@@ -71,26 +71,40 @@ class OrdersController extends Controller
     }
 
     public function index(Request $request) {
-
+    
         $request->validate([
-            'status' => 'required|in:waiting_for_pickup,in_delivery,delivered'
+            'status' => 'nullable|string', 
         ]);
 
-        $activeOrders = $request->user()->orders()->whereIn('status', $request->input('status'))->get();
+        $validStatuses = ['waiting_for_pickup', 'in_delivery', 'delivered'];
 
-        if ($activeOrders->isEmpty()) {
+        $statusArray = $request->input('status') ? explode(',', $request->input('status')) : null;
+
+        if ($statusArray) {
+            foreach ($statusArray as $status) {
+                if (!in_array($status, $validStatuses)) {
+                    return response([
+                        'status' => 'FAILED',
+                        'message' => 'INVALID_STATUS_VALUE',
+                    ])->setStatusCode(422);
+                }
+            }
+        }
+
+        $query = $request->user()->courierorders();
+
+        if ($statusArray) {
+            $query->whereIn('status', $statusArray);
+        }
+    
+        $orders = $query->orderBy('created_at', 'desc')->get();
+    
+        if ($orders->isEmpty()) {
             return response([
                 'status' => 'FAILED',
                 'message' => 'NO_ACTIVE_ORDERS',
             ])->setStatusCode(404);
         }
-
-        return [
-            'status' => 'SUCCESSFUL',
-            'message' => 'ACTIVE_ORDERS_GOT_SUCCESSFULLY',
-            'payload' => [
-                'active_orders' => $activeOrders
-            ]
-        ];
+        return $orders;
     }
 }
