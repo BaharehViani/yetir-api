@@ -34,7 +34,7 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/courier')->middleware(['role.verification:courier'])->group(function () {
             
             Route::prefix('/info')->group(function () {
-                Route::prefix('/', [CourierController::class, 'create']);
+                Route::patch('/', [CourierController::class, 'create']);
             });
 
             Route::prefix('/vehicles')->group(function () {
@@ -43,7 +43,9 @@ Route::prefix('/v1')->group(function () {
 
             Route::prefix('/order')->group(function () {
                 Route::post('/', [OrdersController::class, 'create']);
-                Route::post('/', [OrdersController::class, 'updateStatus']);
+                Route::patch('/', [OrdersController::class, 'updateStatus']);
+                Route::get('/active', [OrdersController::class, 'showActiveOrders']);
+                Route::get('/delivered', [OrdersController::class, 'showDeliveredOrders']);
             });
 
         });

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Order;
+use App\Models\CourierInfo;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class User extends Authenticatable
 {
@@ -20,8 +23,26 @@ class User extends Authenticatable
         'password'
     ];
 
-    public function orderRequests()
-    {
+    public function orderRequests(){
         return $this->hasMany(OrderRequest::class);
+    }
+
+    public function vehicles() {
+        return $this->hasMany(Vehicle::class);
+    }
+
+    public function courierinfo() {
+        return $this->hasOne(CourierInfo::class);
+    }
+
+    public function orders(): HasManyThrough {
+        return $this->hasManyThrough(
+            Order::class, 
+            CourierInfo::class,
+            'user_id',
+            'courier_id',
+            'id',
+            'id'
+        );
     }
 }

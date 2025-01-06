@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\CourierControllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class VehiclesController extends Controller
 {
