@@ -52,8 +52,8 @@ class OrdersController extends Controller
         ]);  
 
         $order = Order::where('courier_id', $request->user()->courierinfo()->first()->id)->find($id);
-
-        if ($order->status === 'canceled' || !$order) {
+        
+        if (!$order || $order->status === 'canceled') {
             return response([
                 'status' => 'FAILED',
                 'message' => 'ORDER_NOT_FOUND'
@@ -62,6 +62,11 @@ class OrdersController extends Controller
 
         if ($request->input('status') === 'canceled') {
             $order->canceled_at = now();
+            $pre_orderRequest = OrderRequest::find($order->order_request_id);
+            //$pre_orderRequest = $order->orderRequest(); /// احتمالا رابطه اشکال داره
+            $pre_orderRequest->status = 'pending';
+            $pre_orderRequest->updated_at = now();
+            $pre_orderRequest->save();
         }
 
         $order->status = $request->input('status');

@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicControllers\UsersController;
 use App\Http\Controllers\CourierControllers\CourierController;
 use App\Http\Controllers\CourierControllers\VehiclesController;
-use App\Http\Controllers\CustomerControllers\OrderRequestsController;
 
 Route::prefix('/v1')->group(function () {
 
@@ -22,9 +21,10 @@ Route::prefix('/v1')->group(function () {
 
         Route::prefix('/customer')->middleware(['role.verification:customer'])->group(function () {
             Route::prefix('/order-requests')->group(function () {
-                Route::get('/', [OrderRequestsController::class, 'index']);
-                Route::get('/{id}', [OrderRequestsController::class, 'show']);
-                Route::post('/', [OrderRequestsController::class, 'create']);
+                Route::get('/', [App\Http\Controllers\CustomerControllers\OrderRequestsController::class, 'index']);
+                Route::get('/{id}', [App\Http\Controllers\CustomerControllers\OrderRequestsController::class, 'show']);
+                Route::post('/', [App\Http\Controllers\CustomerControllers\OrderRequestsController::class, 'create']);
+                Route::patch('/{id}', [App\Http\Controllers\CustomerControllers\OrderRequestsController::class, 'update']);
             });
 
             Route::prefix('/orders')->group(function () {
@@ -49,6 +49,10 @@ Route::prefix('/v1')->group(function () {
                 Route::get('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'show']);
                 Route::post('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'create']);
                 Route::patch('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'update']);
+            });
+
+            Route::prefix('/order-requests')->group(function () {
+                Route::get('/', [App\Http\Controllers\CourierControllers\OrderRequestsController::class, 'index']);
             });
 
         });
