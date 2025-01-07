@@ -49,7 +49,6 @@ Route::prefix('/v1')->group(function () {
                 Route::get('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'show']);
                 Route::post('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'create']);
                 Route::patch('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'update']);
-                Route::patch('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'cancel']);
             });
 
         });

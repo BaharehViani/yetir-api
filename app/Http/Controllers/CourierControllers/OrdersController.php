@@ -62,7 +62,6 @@ class OrdersController extends Controller
 
         if ($request->input('status') === 'canceled') {
             $order->canceled_at = now();
-            $order->save();
         }
 
         $order->status = $request->input('status');
@@ -75,7 +74,7 @@ class OrdersController extends Controller
     }
 
     public function index(Request $request) {
-    
+        
         $request->validate([
             'status' => 'nullable|string', 
         ]);
