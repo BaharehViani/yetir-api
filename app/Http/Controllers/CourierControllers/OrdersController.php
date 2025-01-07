@@ -49,11 +49,11 @@ class OrdersController extends Controller
 
         $request->validate([
             'status' => 'required|string|in:waiting_for_pickup,in_delivery,delivered,canceled',
-        ]);
+        ]);  
 
         $order = Order::where('courier_id', $request->user()->courierinfo()->first()->id)->find($id);
 
-        if (!$order) {
+        if ($order->status === 'canceled' || !$order) {
             return response([
                 'status' => 'FAILED',
                 'message' => 'ORDER_NOT_FOUND'
@@ -74,7 +74,7 @@ class OrdersController extends Controller
     }
 
     public function index(Request $request) {
-        
+
         $request->validate([
             'status' => 'nullable|string', 
         ]);
