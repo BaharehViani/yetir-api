@@ -107,4 +107,12 @@ class OrdersController extends Controller
         }
         return $orders;
     }
+
+    public function show(Request $request, $id)
+    {
+        return $request->user()->courierorders()->find($id) ?: response([
+            'status' => 'FAILED',
+            'message' => 'ORDER_REQUEST_NOT_FOUND'
+        ])->setStatusCode(404);
+    }
 }

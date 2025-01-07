@@ -29,6 +29,7 @@ Route::prefix('/v1')->group(function () {
 
             Route::prefix('/orders')->group(function () {
                 Route::get('/', [App\Http\Controllers\CustomerControllers\OrdersController::class, 'index']);
+                Route::get('/{id}', [App\Http\Controllers\CustomerControllers\OrdersController::class, 'show']);
             });
 
         });
@@ -45,6 +46,7 @@ Route::prefix('/v1')->group(function () {
 
             Route::prefix('/orders')->group(function () {
                 Route::get('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'index']);
+                Route::get('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'show']);
                 Route::post('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'create']);
                 Route::patch('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'update']);
             });
