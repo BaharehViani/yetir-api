@@ -48,7 +48,7 @@ class OrdersController extends Controller
     public function update(Request $request, $id) {
 
         $request->validate([
-            'status' => 'required|string'
+            'status' => 'required|string|in:waiting_for_pickup,in_delivery,delivered,canceled',
         ]);
 
         $order = Order::where('courier_id', $request->user()->courierinfo()->first()->id)->find($id);
@@ -60,14 +60,18 @@ class OrdersController extends Controller
             ])->setStatusCode(404);
         }
 
+        if ($request->input('status') === 'canceled') {
+            $order->canceled_at = now();
+            $order->save();
+        }
+
         $order->status = $request->input('status');
         $order->save();
 
         return [
             'status' => 'SUCCESSFUL',
-            'message' => 'ORDER_STATUS_UPDATED_SUCCESSFULLY',
-        ];
-            
+            'message' => 'ORDER_UPDATED_SUCCESSFULLY',
+        ];      
     }
 
     public function index(Request $request) {
@@ -108,11 +112,10 @@ class OrdersController extends Controller
         return $orders;
     }
 
-    public function show(Request $request, $id)
-    {
+    public function show(Request $request, $id) {
         return $request->user()->courierorders()->find($id) ?: response([
             'status' => 'FAILED',
             'message' => 'ORDER_REQUEST_NOT_FOUND'
         ])->setStatusCode(404);
-    }
+    }   
 }
