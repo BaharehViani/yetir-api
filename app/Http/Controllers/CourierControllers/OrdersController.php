@@ -82,6 +82,8 @@ class OrdersController extends Controller
 
         $request->validate([
             'status' => 'nullable|string', 
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
 
         $validStatuses = ['waiting_for_pickup', 'in_delivery', 'delivered'];
@@ -105,6 +107,12 @@ class OrdersController extends Controller
             $query->whereIn('status', $statusArray);
         }
     
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        if ($startDate || $endDate) {
+            $query->whereBetween('orders.updated_at', [$startDate, $endDate]);
+        }
+
         $orders = $query->orderBy('created_at', 'desc')->get();
     
         if ($orders->isEmpty()) {
