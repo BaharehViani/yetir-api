@@ -15,6 +15,15 @@ class OrdersController extends Controller
             'order_request_id' => 'required|ulid|exists:order_requests,id',
         ]);
 
+        $activeOrder = $request->user()->courierinfo()->first()->orders()
+            ->whereIn('status', ['waiting_for_pickup', 'in_delivery'])->first();
+        if ($activeOrder) {
+            return response([
+                'status' => 'FAILED',
+                'message' => 'COURIER_HAS_ACTIVE_ORDER'
+            ])->setStatusCode(400);
+        }
+
         $order_request = OrderRequest::find($request->input('order_request_id'));
         if (!$order_request) {
             return response([

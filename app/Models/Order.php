@@ -19,7 +19,7 @@ class Order extends Model
 
     
     public function courierinfo() {
-        return $this->belongsTo(CourierInfo::class);
+        return $this->belongsTo(CourierInfo::class, 'courier_id');
     }
 
     public function orderRequest() {
