@@ -9,6 +9,8 @@ class OrderRequestsController extends Controller
 {
     //
     public function index(Request $request) {
-        return OrderRequest::where('status', 'pending')->get();
+        return OrderRequest::where('status', 'pending')
+        ->where('weight', '<=' ,$request->user()->courierinfo()->first()->maximum_capacity)
+        ->get();
     }
 }
