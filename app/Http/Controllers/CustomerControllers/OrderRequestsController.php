@@ -36,8 +36,7 @@ class OrderRequestsController extends Controller
         $new_order_request->weight = $request->input('weight');
         $new_order_request->user_id = $request->user()->id;
         $new_order_request->status = 'pending';
-        $random_price = rand(20, 100) * 1000;
-        $new_order_request->cost = $random_price;
+        $new_order_request->cost = rand(20, 100) * 1000;
         $new_order_request->save();
 
         return [
