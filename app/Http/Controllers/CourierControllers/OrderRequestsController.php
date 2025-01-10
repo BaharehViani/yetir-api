@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\CourierControllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\OrderRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class OrderRequestsController extends Controller
 {
