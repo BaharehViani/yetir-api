@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('weight');
             $table->text('cost');
             $table->text('status', ['pending','accepted','declined'])->default('pending');
+            $table->integer('code');
             $table->timestamps();
         });
     }

@@ -37,6 +37,7 @@ class OrderRequestsController extends Controller
         $new_order_request->user_id = $request->user()->id;
         $new_order_request->status = 'pending';
         $new_order_request->cost = rand(20, 100) * 1000;
+        $new_order_request->code = (OrderRequest::max('code') ?? 999) + 1;
         $new_order_request->save();
 
         return [

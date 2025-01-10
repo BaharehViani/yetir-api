@@ -45,6 +45,7 @@ class OrdersController extends Controller
         $new_order->order_request_id = $order_request->id;
         $new_order->courier_id = $request->user()->courierinfo()->first()->id;
         $new_order->status = 'waiting_for_pickup';
+        $new_order->code = (Order::max('code') ?? 999) + 1;
         $new_order->save();
         
         $order_request->status = 'accepted';

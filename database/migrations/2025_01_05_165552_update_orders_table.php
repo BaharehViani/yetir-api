@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->foreignUlid('order_request_id')->constrained();
             $table->foreignUlid('courier_id')->constrained('courier_info', 'id');
+            $table->integer('code');
         });
     }
 
