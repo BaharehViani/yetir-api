@@ -15,6 +15,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->text('first_name');
             $table->text('last_name');
+            $table->text('national_code');
             $table->text('phone');
             $table->dateTime('phone_verified_at')->nullable();
             $table->text('password');

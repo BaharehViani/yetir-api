@@ -15,7 +15,7 @@ class Order extends Model
     //
     use HasFactory, HasUlids;
 
-    protected $with = ['orderRequest'];
+    protected $with = ['orderRequest', 'courierinfo'];
 
     
     public function courierinfo() {
