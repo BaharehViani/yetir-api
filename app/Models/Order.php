@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Invoice;
 use App\Models\CourierInfo;
 use App\Models\OrderRequest;
 use Illuminate\Database\Eloquent\Model;
@@ -35,5 +36,9 @@ class Order extends Model
             'id',
             'id'    
         );
+    }
+
+    public function invoice() {
+        return $this->hasOne(Invoice::class);
     }
 }
