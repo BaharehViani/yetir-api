@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('total');
             $table->text('tax');
             $table->text('grand_total');
-            $table->text('status');
+            $table->text('status', ['pending', 'paid', 'cancelled', 'refunded'])->default('pending');
             $table->timestamps();
         });
     }

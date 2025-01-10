@@ -2,9 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PublicControllers\UsersController;
 use App\Http\Controllers\CourierControllers\CourierController;
 use App\Http\Controllers\CourierControllers\VehiclesController;
+use App\Http\Controllers\CustomerControllers\InvoicesController;
 
 Route::prefix('/v1')->group(function () {
 
@@ -33,7 +33,7 @@ Route::prefix('/v1')->group(function () {
             });
 
             Route::prefix('/invoices')->group(function () {
-                Route::get('/', [App\Http\Controllers\CustomerControllers\InvoicesController::class, 'index']);
+                Route::get('/', [InvoicesController::class, 'index']);
             });
 
         });

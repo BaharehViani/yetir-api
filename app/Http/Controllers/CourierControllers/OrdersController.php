@@ -54,7 +54,7 @@ class OrdersController extends Controller
         $new_invoice->order_id = $new_order->id;
         $new_invoice->user_id = $order_request->user_id;
         $new_invoice->total = $order_request->cost;
-        $new_invoice->tax = (floatval($order_request->cost) * 10) / 100;
+        $new_invoice->tax = $order_request->cost / 10;
         $new_invoice->grand_total = $new_invoice->total + $new_invoice->tax;
         $new_invoice->status = 'pending';
         $new_invoice->save();
