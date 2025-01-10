@@ -14,14 +14,15 @@ class OrdersController extends Controller
         $request->validate([
             'order_request_id' => 'required|ulid|exists:order_requests,id',
         ]);
-
-        $activeOrder = $request->user()->courierinfo()->first()->orders()
-            ->whereIn('status', ['waiting_for_pickup', 'in_delivery'])->first();
-        if ($activeOrder) {
-            return response([
-                'status' => 'FAILED',
-                'message' => 'COURIER_HAS_ACTIVE_ORDER'
-            ])->setStatusCode(400);
+        
+        if($request->user()->courierinfo()->first()->orders()) {
+            $activeOrder = $request->user()->courierinfo()->first()->orders()->whereIn('status', ['waiting_for_pickup', 'in_delivery'])->first();
+            if ($activeOrder) {
+                return response([
+                    'status' => 'FAILED',
+                    'message' => 'COURIER_HAS_ACTIVE_ORDER'
+                ])->setStatusCode(400);
+            }
         }
 
         $order_request = OrderRequest::find($request->input('order_request_id'));

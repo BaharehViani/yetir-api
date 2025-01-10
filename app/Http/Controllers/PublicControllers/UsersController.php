@@ -16,7 +16,8 @@ class UsersController extends Controller
             'last_name' => 'required|string',
             'phone' => 'required|starts_with:0|size:11|unique:users,phone',
             'password' => 'required|string|min:8',
-            'role' => 'required|in:customer,courier'
+            'role' => 'required|in:customer,courier',
+            'national_code' => 'required|unique:users,national_code|size:10',
         ]);
 
         $newUser = new User;
@@ -25,6 +26,7 @@ class UsersController extends Controller
         $newUser->phone = $request->input('phone');
         $newUser->password = Hash::make($request->input('password'));
         $newUser->role = $request->input('role');
+        $newUser->national_code = $request->input('national_code');
         $newUser->save();
 
         return [
