@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CourierControllers;
 
 use App\Models\Order;
+use App\Models\Invoice;
 use App\Models\OrderRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -48,6 +49,15 @@ class OrdersController extends Controller
         
         $order_request->status = 'accepted';
         $order_request->save();
+
+        $new_invoice = new Invoice;
+        $new_invoice->order_id = $new_order->id;
+        $new_invoice->user_id = $order_request->user_id;
+        $new_invoice->total = $order_request->cost;
+        $new_invoice->tax = (floatval($order_request->cost) * 10) / 100;
+        $new_invoice->grand_total = $new_invoice->total + $new_invoice->tax;
+        $new_invoice->status = 'pending';
+        $new_invoice->save();
 
         return[
             'status' => 'SUCCESSFUL',
@@ -139,5 +149,9 @@ class OrdersController extends Controller
             'status' => 'FAILED',
             'message' => 'ORDER_REQUEST_NOT_FOUND'
         ])->setStatusCode(404);
-    }   
+    }  
+    
+    public function current(Request $request) {
+        return $request->user()->courierorders()->orderBy('updated_at', 'desc')->first();
+    } 
 }

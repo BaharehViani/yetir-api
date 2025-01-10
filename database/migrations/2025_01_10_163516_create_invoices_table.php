@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('order_id')->constrained();
+            $table->foreignUlid('user_id')->constrained();
             $table->text('total');
             $table->text('tax');
             $table->text('grand_total');
