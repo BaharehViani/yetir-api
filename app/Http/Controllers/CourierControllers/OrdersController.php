@@ -62,7 +62,10 @@ class OrdersController extends Controller
 
         return[
             'status' => 'SUCCESSFUL',
-            'message' => 'REQUEST_ACCEPTED_AND_ORDER_CREATED_SUCCESSFULY'
+            'message' => 'REQUEST_ACCEPTED_AND_ORDER_CREATED_SUCCESSFULY',
+            'payload' => [
+                'order' => $new_order
+            ]
         ];
     }
 
