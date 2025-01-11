@@ -134,7 +134,7 @@ class OrdersController extends Controller
             $query->whereBetween('orders.updated_at', [$startDate, $endDate]);
         }
 
-        $orders = $query->orderBy('created_at', 'desc')->get();
+        $orders = $query->orderBy('updated_at', 'desc')->get();
     
         if ($orders->isEmpty()) {
             return response([
@@ -148,11 +148,11 @@ class OrdersController extends Controller
     public function show(Request $request, $id) {
         return $request->user()->courierorders()->find($id) ?: response([
             'status' => 'FAILED',
-            'message' => 'ORDER_REQUEST_NOT_FOUND'
+            'message' => 'ORDER_NOT_FOUND'
         ])->setStatusCode(404);
     }  
     
-    public function current(Request $request) {
-        return $request->user()->courierorders()->orderBy('updated_at', 'desc')->first();
+    public function getActiveOrder(Request $request) {
+        return $this->index($request)->first() ?: null;
     } 
 }
