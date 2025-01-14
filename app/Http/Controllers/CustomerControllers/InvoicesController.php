@@ -25,8 +25,11 @@ class InvoicesController extends Controller
     }
     
     public function update(Request $request, $id) {
+        $request->validate([
+            'status' => 'sometimes|in:paid,cancelled,refunded' // just for now
+        ]);
         $invoice = $request->user()->invoices()->find($id);
-        $invoice->status = 'paid';
+        $invoice->status = 'paid'; // just for now
         $invoice->save();
         return [
             'status' => 'SUCCESSFUL',

@@ -34,7 +34,10 @@ Route::prefix('/v1')->group(function () {
             });
 
             Route::prefix('/invoices')->group(function () {
-                Route::get('/', [InvoicesController::class, 'index']);
+                Route::get('/all', [InvoicesController::class, 'indexAll']);
+                Route::get('/pending', [InvoicesController::class, 'indexPending']);
+                //Route::get('/{id}', [InvoicesController::class, 'show']);
+                Route::patch('/{id}', [InvoicesController::class, 'update']);
             });
 
         });
