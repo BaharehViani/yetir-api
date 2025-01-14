@@ -94,6 +94,7 @@ class OrdersController extends Controller
         }
 
         $order->status = $request->input('status');
+        $order->updated_at = now();
         $order->save();
 
         return [

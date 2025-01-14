@@ -50,7 +50,7 @@ class UserController extends Controller
         if ($request->has('national_code')) {
             $user->national_code = $request->input('national_code');
         }
-
+        $user->updated_at = now();
         $user->save();
 
         return [
