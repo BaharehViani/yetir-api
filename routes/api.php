@@ -17,6 +17,7 @@ Route::prefix('/v1')->group(function () {
 
         Route::prefix('/x-user')->group(function () {
             Route::get('/', [App\Http\Controllers\XUserControllers\UserController::class, 'index']);
+            Route::patch('/{id}', [App\Http\Controllers\XUserControllers\UserController::class, 'update']);
         });
 
         Route::prefix('/customer')->middleware(['role.verification:customer'])->group(function () {
@@ -50,8 +51,8 @@ Route::prefix('/v1')->group(function () {
 
             Route::prefix('/orders')->group(function () {
                 Route::get('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'index']);
-                //Route::get('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'show']);
-                Route::get('/active', [App\Http\Controllers\CourierControllers\OrdersController::class, 'getActiveOrder']);
+                Route::get('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'show']);
+                //Route::get('/active', [App\Http\Controllers\CourierControllers\OrdersController::class, 'getActiveOrder']);
                 Route::post('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'create']);
                 Route::patch('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'update']);
             });

@@ -25,4 +25,9 @@ class CourierController extends Controller
         ];
     }
 
+    public function index(Request $request) {
+        $courier = $request->user()->courierinfo()->first();
+        $vehicle = $request->user()->vehicles()->get();
+        return ['courier' => $courier, 'vehicle' => $vehicle];
+    }
 }    

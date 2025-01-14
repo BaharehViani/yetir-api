@@ -49,12 +49,12 @@ class OrderRequestsController extends Controller
     public function update(Request $request, $id) {
 
         $request->validate([
-            'type' => 'nullable|string',
-            'description' => 'nullable|string',
-            'pickup_location' => 'nullable|string',
-            'dropoff_location' => 'nullable|string',
-            'weight' => 'nullable',
-            'status' => 'nullable|string|in:declined',
+            'type' => 'sometimes|string',
+            'description' => 'sometimes|string',
+            'pickup_location' => 'sometimes|string',
+            'dropoff_location' => 'sometimes|string',
+            'weight' => 'sometimes',
+            'status' => 'sometimes|string|in:declined',
         ]);
         $order_request = OrderRequest::where('user_id', $request->user()->id)->find($id);
 
@@ -67,29 +67,24 @@ class OrderRequestsController extends Controller
         if ($order_request->status === 'pending') {
             if ($request->has('status')) {
                 $order_request->status = $request->input('status');
-                $order_request->updated_at = now();
-                $order_request->save();
-            } if ($request->has('type')) {
-                $order_request->type = $request->input('type');
-                $order_request->updated_at = now();
-                $order_request->save();
-            } if ($request->has('weight')) {
-                $order_request->weight = $request->input('weight');
-                $order_request->updated_at = now();
-                $order_request->save();
-            } if($request->has('description')) {
-                $order_request->description = $request->input('description');
-                $order_request->updated_at = now();
-                $order_request->save();
-            } if ($request->has('pickup_location')) {
-                $order_request->pickup_location = $request->input('pickup_location');
-                $order_request->updated_at = now();
-                $order_request->save();
-            } if ($request->has('dropoff_location')) {
-                $order_request->dropoff_location = $request->input('dropoff_location');
-                $order_request->updated_at = now();
-                $order_request->save();
             }
+            if ($request->has('type')) {
+                $order_request->type = $request->input('type');
+            }
+            if ($request->has('weight')) {
+                $order_request->weight = $request->input('weight');
+            }
+            if($request->has('description')) {
+                $order_request->description = $request->input('description');
+            }
+            if ($request->has('pickup_location')) {
+                $order_request->pickup_location = $request->input('pickup_location');
+            }
+            if ($request->has('dropoff_location')) {
+                $order_request->dropoff_location = $request->input('dropoff_location');
+            }
+            $order_request->updated_at = now();
+            $order_request->save();
             return [
                 'status' => 'SUCCESSFUL',
                 'message' => 'REQUEST_UPDATED_SUCCESSFULLY'
