@@ -43,6 +43,8 @@ Route::prefix('/v1')->group(function () {
         });
 
         Route::prefix('/courier')->middleware(['role.verification:courier'])->group(function () {
+
+            Route::get('/', [CourierController::class, 'index']);
             
             Route::prefix('/info')->group(function () {
                 Route::patch('/', [CourierController::class, 'create']);
