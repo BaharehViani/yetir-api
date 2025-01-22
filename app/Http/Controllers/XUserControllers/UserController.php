@@ -28,7 +28,6 @@ class UserController extends Controller
             'last_name' => 'sometimes|string',
             'phone' => "sometimes|starts_with:0|size:11|unique:users,phone,$user->id",
             'password' => 'sometimes|string|min:8',
-            'national_code' => "sometimes|size:10|unique:users,national_code,$user->id",
         ]);
 
         if ($request->has('first_name')) {
@@ -47,9 +46,6 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('password'));
         }
 
-        if ($request->has('national_code')) {
-            $user->national_code = $request->input('national_code');
-        }
         $user->updated_at = now();
         $user->save();
 
