@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Order;
+use App\Models\Invoice;
 use App\Models\CourierInfo;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
@@ -33,6 +34,10 @@ class User extends Authenticatable
 
     public function courierinfo() {
         return $this->hasOne(CourierInfo::class);
+    }
+
+    public function invoices() {
+        return $this->hasMany(Invoice::class);
     }
 
     public function courierorders(): HasManyThrough {

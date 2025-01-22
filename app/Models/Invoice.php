@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
@@ -21,5 +22,9 @@ class Invoice extends Model
 
     public function order() {
         return $this->belongsTo(Order::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }
