@@ -13,6 +13,8 @@ class Invoice extends Model
     //
     use HasFactory, HasUlids;
 
+    protected $with = ['order'];
+
     public function transactions() {
         return $this->hasMany(Transaction::class);
     }
