@@ -160,11 +160,11 @@ class OrdersController extends Controller
         return $this->index($request)->first() ?: null;
     } 
 
-    public function show(Request $request, $current) {
-        $order = $request->user()->courierorders()->find($current);
-        if (!$order) {
-            $order = Order::where('courier_id', $request->user()->courierinfo()->first()->id)->where('status', 'pending')->get();
-        }
-    
-    }  
+    // public function show(Request $request, $current) {
+    //     $order = $request->user()->courierorders()->find($current);
+    //     if (!$order) {
+    //         $order = $request->user()->courierorders()->where('status', 'pending')->get();
+    //     }
+    //     return $order;
+    // }  
 }
