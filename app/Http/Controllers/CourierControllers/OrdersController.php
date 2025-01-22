@@ -161,10 +161,10 @@ class OrdersController extends Controller
     } 
 
     public function show(Request $request, $current) {
-        
-        return $request->user()->courierorders()->find($id) ?: response([
-            'status' => 'FAILED',
-            'message' => 'ORDER_NOT_FOUND'
-        ])->setStatusCode(404);
+        $order = $request->user()->courierorders()->find($current);
+        if (!$order) {
+            $order = Order::where('courier_id', $request->user()->courierinfo()->first()->id)->where('status', 'pending')->get();
+        }
+    
     }  
 }
