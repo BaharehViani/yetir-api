@@ -149,14 +149,22 @@ class OrdersController extends Controller
         return $orders;
     }
 
-    public function show(Request $request, $id) {
+    // public function show(Request $request, $id) {
+    //     return $request->user()->courierorders()->find($id) ?: response([
+    //         'status' => 'FAILED',
+    //         'message' => 'ORDER_NOT_FOUND'
+    //     ])->setStatusCode(404);
+    // }  
+    
+    public function getActiveOrder(Request $request) {
+        return $this->index($request)->first() ?: null;
+    } 
+
+    public function show(Request $request, $current) {
+        
         return $request->user()->courierorders()->find($id) ?: response([
             'status' => 'FAILED',
             'message' => 'ORDER_NOT_FOUND'
         ])->setStatusCode(404);
     }  
-    
-    public function getActiveOrder(Request $request) {
-        return $this->index($request)->first() ?: null;
-    } 
 }

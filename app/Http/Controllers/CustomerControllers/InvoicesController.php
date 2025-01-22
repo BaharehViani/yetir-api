@@ -10,7 +10,7 @@ class InvoicesController extends Controller
 {
     //
     public function indexAll(Request $request) {
-        return Invoice::where('user_id', $request->user()->id)->get();
+        return Invoice::where('user_id', $request->user()->id)->orderBy('status')->get();
     }
 
     public function indexPending(Request $request) {
