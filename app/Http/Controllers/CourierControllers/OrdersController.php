@@ -157,7 +157,7 @@ class OrdersController extends Controller
     // }  
     
     public function getActiveOrder(Request $request) {
-        return $this->index($request)->first() ?: null;
+        return $this->index($request)->where(['status', '=', 'waiting_for_pickup|in_delivery',])->first() ?: null;
     } 
 
     // public function show(Request $request, $current) {
