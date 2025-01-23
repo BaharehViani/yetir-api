@@ -157,15 +157,14 @@ class OrdersController extends Controller
     // }  
     
     public function getActiveOrder(Request $request) {
-        //return $this->index($request)->get()->where(['status', '=', 'waiting_for_pickup|in_delivery',])->first() ?: null;
         return $request->user()->courierorders()->whereIn('status', ['waiting_for_pickup', 'in_delivery'])->first() ?: null;
     } 
 
-    // public function show(Request $request, $id) {
-    //     $order = $request->user()->courierorders()->find($id);
-    //     if (!$order) {
-    //         $order = $request->user()->courierorders()->whereIn('status', ['waiting_for_pickup', 'in_delivery'])->first();
-    //     }
-    //     return $order;
-    // }  
+    public function show(Request $request, $id) {
+        $order = $request->user()->courierorders()->find($id);
+        if (!$order) {
+            $order = $request->user()->courierorders()->whereIn('status', ['waiting_for_pickup', 'in_delivery'])->first();
+        }
+        return $order;
+    }  
 }
