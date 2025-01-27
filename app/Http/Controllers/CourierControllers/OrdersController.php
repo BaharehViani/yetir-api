@@ -147,24 +147,10 @@ class OrdersController extends Controller
             ])->setStatusCode(404);
         }
         return $orders;
-    }
-
-    // public function show(Request $request, $id) {
-    //     return $request->user()->courierorders()->find($id) ?: response([
-    //         'status' => 'FAILED',
-    //         'message' => 'ORDER_NOT_FOUND'
-    //     ])->setStatusCode(404);
-    // }  
+    }  
     
     public function getActiveOrder(Request $request) {
         return $request->user()->courierorders()->whereIn('status', ['waiting_for_pickup', 'in_delivery'])->first() ?: null;
     } 
-
-    public function show(Request $request, $id) {
-        $order = $request->user()->courierorders()->find($id);
-        if (!$order) {
-            $order = $request->user()->courierorders()->whereIn('status', ['waiting_for_pickup', 'in_delivery'])->first();
-        }
-        return $order;
-    }  
+    
 }
