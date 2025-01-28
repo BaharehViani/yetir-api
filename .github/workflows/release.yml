@@ -1,0 +1,12 @@
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build:
+    name: backend-deployment
+    runs-on: yetir_server
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker compose up -d --force-recreate
