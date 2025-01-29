@@ -1,5 +1,14 @@
 <?php
 
+// -------------------------------------------------------------------------------------------
+//
+// Yetir Delivery API
+// Copyright (c) 2025. Software engineering project . All rights reserved.
+// Developed by Bahareh Viani <baharehviani@gamil.com>, Faezeh Alimoradi & Fatemeh Alimoradi.
+// 
+// -------------------------------------------------------------------------------------------
+
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourierControllers\CourierController;
