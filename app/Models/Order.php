@@ -13,12 +13,10 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Order extends Model
 {
-    //
     use HasFactory, HasUlids;
 
     protected $with = ['orderRequest', 'courierinfo'];
 
-    
     public function courierinfo() {
         return $this->belongsTo(CourierInfo::class, 'courier_id');
     }

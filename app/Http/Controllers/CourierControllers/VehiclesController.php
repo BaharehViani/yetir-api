@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 
 class VehiclesController extends Controller
 {
-    //
     public function create(Request $request) {
 
         $request->validate([

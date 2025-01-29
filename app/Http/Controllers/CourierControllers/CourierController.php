@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 
 class CourierController extends Controller
 {
-    //
     public function create(Request $request) {
         $request->validate([
             'photo_url' => 'nullable|string',

@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 
 class InvoicesController extends Controller
 {
-    //
     public function indexAll(Request $request) {
         return Invoice::where('user_id', $request->user()->id)->orderBy('status')->get();
     }
@@ -26,10 +25,10 @@ class InvoicesController extends Controller
     
     public function update(Request $request, $id) {
         $request->validate([
-            'status' => 'sometimes|in:paid,cancelled,refunded' // just for now
+            'status' => 'sometimes|in:paid,cancelled,refunded'
         ]);
         $invoice = $request->user()->invoices()->find($id);
-        $invoice->status = 'paid'; // just for now
+        $invoice->status = 'paid';
         $invoice->save();
         return [
             'status' => 'SUCCESSFUL',

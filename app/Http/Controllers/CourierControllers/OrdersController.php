@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 
 class OrdersController extends Controller
 {
-    //
     public function create(Request $request) {
         $request->validate([
             'order_request_id' => 'required|ulid|exists:order_requests,id',
@@ -86,7 +85,6 @@ class OrdersController extends Controller
 
         if ($request->input('status') === 'canceled') {
             $pre_orderRequest = $order->orderRequest;
-            //$pre_orderRequest = $order->orderRequest()->first();
             $pre_orderRequest->status = 'pending';
             $pre_orderRequest->updated_at = now();
             $pre_orderRequest->save();

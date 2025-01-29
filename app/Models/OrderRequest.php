@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OrderRequest extends Model
 {
-    //
     use HasFactory, HasUlids;
 
     protected $table = 'order_requests';

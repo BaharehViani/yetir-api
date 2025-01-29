@@ -36,7 +36,6 @@ Route::prefix('/v1')->group(function () {
             Route::prefix('/invoices')->group(function () {
                 Route::get('/all', [InvoicesController::class, 'indexAll']);
                 Route::get('/pending', [InvoicesController::class, 'indexPending']);
-                //Route::get('/{id}', [InvoicesController::class, 'show']);
                 Route::patch('/{id}', [InvoicesController::class, 'update']);
             });
 
@@ -56,7 +55,6 @@ Route::prefix('/v1')->group(function () {
 
             Route::prefix('/orders')->group(function () {
                 Route::get('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'index']);
-                //Route::get('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'show']);
                 Route::get('/active', [App\Http\Controllers\CourierControllers\OrdersController::class, 'getActiveOrder']);
                 Route::post('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'create']);
                 Route::patch('/{id}', [App\Http\Controllers\CourierControllers\OrdersController::class, 'update']);

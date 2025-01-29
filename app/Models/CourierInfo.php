@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CourierInfo extends Model
 {
-    //
     use HasFactory, HasUlids;
 
     protected $table = 'courier_info';
+    
     protected $with = ['user'];
 
     public function user()
