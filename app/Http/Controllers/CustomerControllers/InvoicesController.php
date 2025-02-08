@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class InvoicesController extends Controller
 {
     public function indexAll(Request $request) {
-        return Invoice::where('user_id', $request->user()->id)->orderBy('updated_at', 'asc')->get();
+        return Invoice::where('user_id', $request->user()->id)->orderBy('status', 'desc')->get();
     }
 
     public function indexPending(Request $request) {
