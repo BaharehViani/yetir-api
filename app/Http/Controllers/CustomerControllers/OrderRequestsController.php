@@ -95,6 +95,5 @@ class OrderRequestsController extends Controller
                 'message' => 'REQUEST_CANNOT_BE_UPDATED'
             ])->setStatusCode(400);
         }
-
     }
 }
