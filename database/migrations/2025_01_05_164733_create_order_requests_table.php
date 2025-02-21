@@ -22,6 +22,10 @@ return new class extends Migration
             $table->text('cost');
             $table->text('status', ['pending','accepted','declined'])->default('pending');
             $table->integer('code');
+            $table->float('pickup_lat')->nullable();
+            $table->float('pickup_lng')->nullable();
+            $table->float('dropoff_lat')->nullable();
+            $table->float('dropoff_lng')->nullable();
             $table->timestamps();
         });
     }

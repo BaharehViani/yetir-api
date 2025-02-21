@@ -27,6 +27,10 @@ class OrderRequestsController extends Controller
             'pickup_location' => 'required|string',
             'dropoff_location' => 'required|string',
             'weight' => 'required',
+            'pickup_lat' => 'nullable|numeric',
+            'pickup_lng' => 'nullable|numeric',
+            'dropoff_lat' => 'nullable|numeric',
+            'dropoff_lng' => 'nullable|numeric',
         ]);
         $new_order_request = new OrderRequest;
         $new_order_request->type = $request->input('type');
@@ -38,6 +42,10 @@ class OrderRequestsController extends Controller
         $new_order_request->status = 'pending';
         $new_order_request->cost = rand(20, 100) * 1000;
         $new_order_request->code = (OrderRequest::max('code') ?? 999) + 1;
+        $new_order_request->pickup_lat = $request->input('pickup_lat');
+        $new_order_request->pickup_lng = $request->input('pickup_lng');
+        $new_order_request->dropoff_lat = $request->input('dropoff_lat');
+        $new_order_request->dropoff_lng = $request->input('dropoff_lng');
         $new_order_request->save();
 
         return [
