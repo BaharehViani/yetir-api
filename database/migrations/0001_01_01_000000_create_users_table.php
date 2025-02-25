@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('phone');
             $table->dateTime('phone_verified_at')->nullable();
             $table->text('password');
-            $table->enum('role', ['customer', 'courier']);
+            $table->enum('role', ['customer', 'courier', 'admin']);
             $table->timestamps();
         });
 

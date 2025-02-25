@@ -7,6 +7,8 @@ use App\Models\Invoice;
 use App\Models\OrderRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Morilog\Jalali\CalendarUtils;
+use Carbon\Carbon;
 
 class OrdersController extends Controller
 {
@@ -147,8 +149,137 @@ class OrdersController extends Controller
         return $orders;
     }  
     
-    public function getActiveOrder(Request $request) {
+    public function activeOrder(Request $request) {
         return $request->user()->courierorders()->whereIn('status', ['waiting_for_pickup', 'in_delivery'])->first() ?: null;
     } 
     
+    public function monthlyIncome(Request $request) {
+        $orders = $request->user()->courierorders()
+        ->where('status', 'delivered')
+        ->with('orderRequest') // لود کردن `orderRequest` برای دسترسی به هزینه‌ها
+        ->get()
+        ->groupBy(function ($order) {
+            return CalendarUtils::strftime('Y-m', strtotime($order->updated_at)); // دسته‌بندی بر اساس سال-ماه شمسی
+        })
+        ->map(function ($group, $key) {
+            list($year, $month) = explode('-', $key); // استخراج سال و ماه شمسی
+            return [
+                'jalali_year' => (int) $year,
+                'jalali_month' => (int) $month,
+                'total_income' => $group->sum(fn($order) => $order->orderRequest->cost),
+            ];
+        })
+        ->values(); // تبدیل به آرایه مرتب‌شده
+        return $orders;
+    }
+
+    public function orderTypes(Request $request) {
+        // گرفتن تمام سفارشات تحویل داده شده
+        $orders = $request->user()->courierorders()
+            ->where('status', 'delivered')
+            ->with('orderRequest')
+            ->get();
+    
+        // تعداد کل سفارشات تحویل داده شده
+        $totalOrders = $orders->count();
+        // در صورتی که هیچ سفارشی وجود نداشته باشد
+        if ($totalOrders === 0) {
+            return [
+                'total_delivered_orders' => 0,
+                'packages' => [
+                    'pocket' => 0,
+                    'smallBox' => 0,
+                    'mediumBox' => 0,
+                    'largeBox' => 0
+                ]
+            ];
+        }
+        // گروه‌بندی سفارشات بر اساس نوع بسته
+        $pocketOrders = $orders->filter(function ($order) {
+            return $order->orderRequest->type === 'پاکت';  // فرض بر اینکه 'package_type' مشخص‌کننده نوع بسته است
+        });
+        $smallBoxOrders = $orders->filter(function ($order) {
+            return $order->orderRequest->type === 'جعبه کوچک';
+        });
+        $mediumBoxOrders = $orders->filter(function ($order) {
+            return $order->orderRequest->type === 'جعبه متوسط';
+        });
+        $largeBoxOrders = $orders->filter(function ($order) {
+            return $order->orderRequest->type === 'جعبه بزرگ';
+        });
+        // محاسبه درصد تحویل داده شده برای هر نوع بسته
+        $pocketPercentage = ($pocketOrders->count() / $totalOrders) * 100;
+        $smallBoxPercentage = ($smallBoxOrders->count() / $totalOrders) * 100;
+        $mediumBoxPercentage = ($mediumBoxOrders->count() / $totalOrders) * 100;
+        $largeBoxPercentage = ($largeBoxOrders->count() / $totalOrders) * 100;
+        // ارسال داده‌ها به فرانت‌اند
+        return [
+            'total_delivered_orders' => $totalOrders,
+            'packages' => [
+                'pocket' => $pocketPercentage,
+                'smallBox' => $smallBoxPercentage,
+                'mediumBox' => $mediumBoxPercentage,
+                'largeBox' => $largeBoxPercentage
+            ]
+        ];
+    }
+
+    public function dailyOrdersCount(Request $request) {
+        $orders = $request->user()->courierorders()
+            ->where('status', 'delivered')
+            ->get()
+            ->groupBy(fn($order) => CalendarUtils::strftime('Y-m-d', strtotime($order->created_at)))
+            ->map(fn($group, $date) => [
+                'date' => $date,
+                'jalali_year' => (int) explode('-', $date)[0],
+                'jalali_month' => (int) explode('-', $date)[1],
+                'jalali_day' => (int) explode('-', $date)[2],
+                'count' => $group->count(),
+            ])
+            ->values();
+        
+        return $orders;
+    }
+
+    public function weekHoursActivity(Request $request) {
+        $orders = $request->user()->courierorders()
+            ->where('status', 'delivered')
+            ->get()
+            ->groupBy(function ($order) {
+                $createdAtTehran = Carbon::parse($order->created_at)->setTimezone('Asia/Tehran');
+                //$dayOfWeek = Carbon::parse($order->created_at)->dayOfWeek; // مقدار اصلی روز هفته (۰ = یکشنبه)
+                $dayOfWeek = $createdAtTehran->dayOfWeek;
+                // تبدیل ترتیب روزهای هفته (جمعه = ۰، پنج‌شنبه = ۱، ... ، شنبه = ۶)
+                $newDayOfWeek = match ($dayOfWeek) {
+                    5 => 0, // جمعه -> ۰
+                    4 => 1, // پنج‌شنبه -> ۱
+                    3 => 2, // چهارشنبه -> ۲
+                    2 => 3, // سه‌شنبه -> ۳
+                    1 => 4, // دوشنبه -> ۴
+                    0 => 5, // یکشنبه -> ۵
+                    6 => 6, // شنبه -> ۶
+                };
+    
+                // تقسیم ۲۴ ساعت به ۴ بازه‌ی ۶ ساعته
+                //$hour = Carbon::parse($order->created_at)->hour;
+                $hour = $createdAtTehran->hour;
+                $timeSlot = match (true) {
+                    $hour < 6  => 0, // 00:00 - 05:59
+                    $hour < 12 => 1, // 06:00 - 11:59
+                    $hour < 18 => 2, // 12:00 - 17:59
+                    default    => 3, // 18:00 - 23:59
+                };
+    
+                return "$newDayOfWeek-$timeSlot"; // مقدار جدید برای دسته‌بندی
+            })
+            ->map(fn($group, $key) => [
+                'day' => (int) explode('-', $key)[0], // روز اصلاح‌شده (۰ = جمعه)
+                'slot' => (int) explode('-', $key)[1], // بازه‌ی ۶ ساعتی
+                'count' => $group->count(), // تعداد سفارشات
+            ])
+            ->values();
+    
+        return $orders;
+    }    
+
 }

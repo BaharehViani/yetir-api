@@ -64,7 +64,8 @@ class UsersController extends Controller
             'status' => 'SUCCESSFUL',
             'message' => 'AUTHENTICATION_SUCCESSFUL',
             'payload' => [
-                'token' => $token
+                'token' => $token,
+                'role' => $user->role,
             ]
         ];
     }
