@@ -173,7 +173,7 @@ class OrdersController extends Controller
         return $orders;
     }
 
-    public function orderTypes(Request $request) {
+    public function ordersType(Request $request) {
         // گرفتن تمام سفارشات تحویل داده شده
         $orders = $request->user()->courierorders()
             ->where('status', 'delivered')

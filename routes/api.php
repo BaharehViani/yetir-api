@@ -39,6 +39,9 @@ Route::prefix('/v1')->group(function () {
 
             Route::prefix('/orders')->group(function () {
                 Route::get('/', [App\Http\Controllers\CustomerControllers\OrdersController::class, 'index']);
+                Route::get('/types', [App\Http\Controllers\CustomerControllers\OrdersController::class, 'ordersType']);
+                Route::get('/stats', [App\Http\Controllers\CustomerControllers\OrdersController::class, 'ordersOrderRequestsStats']);
+                Route::get('/spending-stats', [App\Http\Controllers\CustomerControllers\OrdersController::class, 'monthlySpendingStats']);
                 Route::get('/{id}', [App\Http\Controllers\CustomerControllers\OrdersController::class, 'show']);
             });
 
@@ -66,7 +69,7 @@ Route::prefix('/v1')->group(function () {
                 Route::get('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'index']);
                 Route::get('/active', [App\Http\Controllers\CourierControllers\OrdersController::class, 'activeOrder']);
                 Route::get('/income', [App\Http\Controllers\CourierControllers\OrdersController::class, 'monthlyIncome']);
-                Route::get('/types', [App\Http\Controllers\CourierControllers\OrdersController::class, 'orderTypes']);
+                Route::get('/types', [App\Http\Controllers\CourierControllers\OrdersController::class, 'ordersType']);
                 Route::get('/count', [App\Http\Controllers\CourierControllers\OrdersController::class, 'dailyOrdersCount']);
                 Route::get('/heat', [App\Http\Controllers\CourierControllers\OrdersController::class, 'weekHoursActivity']);
                 Route::post('/', [App\Http\Controllers\CourierControllers\OrdersController::class, 'create']);
