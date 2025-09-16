@@ -4,7 +4,7 @@
 //
 // Yetir Delivery API
 // Copyright (c) 2025. Software engineering project . All rights reserved.
-// Developed by Bahareh Viani <baharehviani@gamil.com>, Faezeh Alimoradi & Fatemeh Alimoradi.
+// Developed by Bahareh Viani <baharehviani@gamil.com>.
 // 
 // -------------------------------------------------------------------------------------------
 
