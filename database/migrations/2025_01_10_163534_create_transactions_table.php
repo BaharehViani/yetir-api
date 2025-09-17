@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('invoice_id')->constrained();
-            $table->text('status');
-            $table->text('gateway');
-            $table->text('ref_id');
-            $table->text('ip');
-            
+            $table->unsignedBigInteger('amount');
+            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->string('gateway');
+            $table->string('transaction_id')->index();
+            $table->string('ref_id')->nullable()->index();
+            $table->ipAddress('ip')->nullable();
+            $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
     }

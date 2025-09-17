@@ -11,7 +11,8 @@
         "laravel/sanctum": "^4.0",
         "laravel/telescope": "^5.2",
         "laravel/tinker": "^2.9",
-        "morilog/jalali": "^3.4"
+        "morilog/jalali": "^3.4",
+        "shetabit/payment": "^6.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
