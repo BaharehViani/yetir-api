@@ -67,29 +67,14 @@ class PaymentController extends Controller
             $invoice->status = 'paid';
             $invoice->save();
 
-            return response([
-                'status' => 'SUCCESSFUL',
-                'message' => 'Transaction was successful',
-                'payload' => [
-                    'invoice_id' => $invoice->id,
-                    'ref_id' => $receipt->getReferenceId()
-                ]
-            ])->setStatusCode(200);
+            return redirect()->away(env('RETURN_URL_AFTER_PAYMENT').'?status=success&ref_id='.$transaction->ref_id);
 
         } catch (InvalidPaymentException $exception) {
-            /**
-                when payment is not verified, it will throw an exception.
-                We can catch the exception to handle invalid payments.
-                getMessage method, returns a suitable message that can be used in user interface.
-            **/
 
             $transaction->status = 'failed';
             $transaction->save();
 
-            return response([
-                'status' => 'FAILED',
-                'message' => $exception->getMessage()
-            ])->setStatusCode(422);
+            return redirect()->away(env('RETURN_URL_AFTER_PAYMENT').'?status=failed&msg='.urlencode($exception->getMessage()));
         }
     }
 }
